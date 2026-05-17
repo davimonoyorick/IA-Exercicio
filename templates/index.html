@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       HEADER FIXO
+  ══════════════════════════════════════ -->
+  <header class="app-header">
+
+    <div class="header-left">
+      <span class="logo-name">AI<span class="accent">Lab - Sistema de Desfoque de Imagens e Tokenização de frases</span></span>
+    </div>
+
+    <div class="header-tabs">
+      <button class="htab active" data-tab="face">
+        <span class="tab-label">Desfoque Facial</span>
+      </button>
+      <button class="htab" data-tab="token">
+        <span class="tab-label">Token Quest</span>
+      </button>
+    </div>
+
+    <button class="theme-btn" id="theme-btn" title="Alternar tema">
+      <span id="theme-icon">🌙</span>
+    </button>
+
+  </header>
+
+  <!-- ══════════════════════════════════════
+       CONTEÚDO
+  ══════════════════════════════════════ -->
+  <main class="app-body">
+
+    <!-- ── DESFOQUE FACIAL ── -->
+    <section class="panel active" id="panel-face">
+      <div class="face-grid">
+
+        <!-- Sidebar de controles -->
+        <aside class="face-sidebar">
+          <div class="sidebar-inner">
+
+            <div class="sidebar-title">Desfoque Facial</div>
+            <p class="sidebar-desc">
+              Detecção de rostos via <strong>Haar Cascade</strong> + desfoque de fundo com <strong>Gaussian Blur</strong>.
+            </p>
+
+            <!-- Upload -->
+            <div class="dz" id="face-dz">
+              <input type="file" id="face-file" accept=".jpg,.jpeg,.png,.webp"/>
+              <div id="face-ph">
+                <span class="dz-icon">🖼</span>
+                <div class="dz-lbl">Solte a imagem aqui</div>
+                <div class="dz-sub">JPG · PNG · WEBP — clique ou arraste</div>
+              </div>
+              <div class="thumb" id="face-thumb">
+                <img id="face-prev" src="" alt="preview"/>
+                <div class="thumb-name" id="face-fn"></div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Controle de blur -->
+            <div class="ctrl">
+              <label for="face-blur">Blur</label>
+              <input type="range" id="face-blur" min="11" max="151" step="2" value="75"/>
+              <span class="ctrl-val" id="face-bv">75</span>
+            </div>
+
+            <!-- Botão -->
+            <button class="btn btn-face" id="face-btn" disabled style="margin-top:16px">
+              Detectar e Desfocar
+            </button>
+
+            <!-- Status / erro -->
+            <div class="st" id="face-st">
+              <div class="sp sp-face"></div>
+              Processando com OpenCV…
+            </div>
+            <div class="err" id="face-err">
+              <span>⚠</span><span id="face-em"></span>
+            </div>
+
+            <!-- Métricas pós-processamento -->
+            <div class="face-meta" id="face-meta">
+              <div class="meta-chip">
+                <div class="k">ROSTOS</div>
+                <div class="v" id="fm-r" style="color:var(--face)">—</div>
+              </div>
+              <div class="meta-chip">
+                <div class="k">RESOLUÇÃO</div>
+                <div class="v" id="fm-res">—</div>
+              </div>
+              <div class="meta-chip">
+                <div class="k">BLUR</div>
+                <div class="v" id="fm-b">—</div>
+              </div>
+            </div>
+
+            <!-- Download -->
+            <a class="dl-link" id="face-dl" download="focaface.jpg">
+              ⬇ Baixar resultado
+            </a>
+
+            <div class="divider"></div>
+
+            <!-- Info didática -->
+            <div class="info-box">
+              <strong>1. Haar Cascade</strong> — detecta padrões de rosto em múltiplas escalas.<br><br>
+              <strong>2. ROI + Máscara Elíptica</strong> — isola a região com bordas suavizadas (feathering).<br><br>
+              <strong>3. Alpha Blending</strong> — <code>resultado = original × α + blur × (1−α)</code>
+            </div>
+
+          </div>
+        </aside>
+
+        <!-- Área do resultado -->
+        <div class="face-canvas" id="face-res-card">
+          <div class="face-empty" id="face-empty">
+            <span class="big-icon">🖼</span>
+            <p>Faça upload de uma imagem e clique em Detectar e Desfocar</p>
+          </div>
+          <img class="face-result-img" id="face-result-img" src="" alt="resultado"/>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── TOKEN QUEST ── -->
+    <section class="panel" id="panel-token">
+      <div class="tq-wrap">
+
+        <div class="module-header">
+          <h2>Token</h2>
+          <p>
+            Modelos como GPT e Claude não leem palavras — leem <strong>tokens</strong>.
+            Aqui usamos o <strong>NLTK</strong> para tokenizar e classificar seu texto em tempo real.
+          </p>
+        </div>
+
+        <!-- Input card -->
+        <div class="card">
+          <div class="card-label" style="color:var(--token)">Seu texto</div>
+
+          <textarea
+            id="tq-text"
+            maxlength="3000"
+            placeholder="Digite qualquer texto… experimente frases, nomes, números ou código Python.">
+          </textarea>
+
+          <div class="tq-footer-row">
+            <div class="tq-examples">
+              <button class="ex-btn" onclick="setEx('Olá! Como você está hoje?')">💬 Saudação</button>
+              <button class="ex-btn" onclick="setEx('def tokenize(text):\n    return text.split()')">🐍 Python</button>
+              <button class="ex-btn" onclick="setEx('antidisestablishmentarianism é uma palavra muito longa.')">🔡 Longa</button>
+            </div>
+            <span class="char-ct"><span id="tq-cc">0</span>/3000</span>
+          </div>
+
+          <button class="btn btn-token" id="tq-btn" style="margin-top:14px">
+            Tokenizar
+          </button>
+
+          <div class="st" id="tq-st">
+            <div class="sp sp-token"></div>
+            Analisando com NLTK…
+          </div>
+          <div class="err" id="tq-err">
+            <span>⚠</span><span id="tq-em"></span>
+          </div>
+        </div>
+
+        <!-- Resultado -->
+        <div class="card" id="tq-res" style="display:none">
+          <div class="card-label" style="color:var(--token);margin-bottom:12px">Tokens gerados</div>
+
+          <div class="stage empty" id="stage"></div>
+          <div class="legend" id="legend"></div>
+
+          <div style="margin-top:14px">
+            <div class="metrics">
+              <div class="met">
+                <div class="k">TOKENS</div>
+                <div class="v" id="tm-tot" style="color:var(--token)">—</div>
+              </div>
+              <div class="met">
+                <div class="k">CHARS</div>
+                <div class="v" id="tm-ch">—</div>
+              </div>
+              <div class="met">
+                <div class="k">CH / TOKEN</div>
+                <div class="v" id="tm-rt">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="xp">
+              <div class="xp-lvl" id="xp-lv">1<small>nível</small></div>
+              <div class="xp-body">
+                <div class="xp-top">
+                  <span class="xp-label">XP TOTAL</span>
+                  <span class="xp-pts" id="xp-pts">0 XP</span>
+                </div>
+                <div class="xp-track">
+                  <div class="xp-fill" id="xp-fill" style="width:0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
