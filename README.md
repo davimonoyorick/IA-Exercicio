@@ -45,13 +45,10 @@ ia-exercicio/
 
 ### Passo a passo
 
-**1. Extraia o projeto e entre na pasta**
+**1. Clone este repositório**
 ```bash
-cd ia-exercicio
+git clone https://github.com/davimonoyorick/IA-Exercicio.git
 ```
-
-
-
 **2. Instale as dependências**
 ```bash
 pip install -r requirements.txt
