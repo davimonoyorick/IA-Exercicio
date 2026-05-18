@@ -139,9 +139,9 @@
       <div class="tq-wrap">
 
         <div class="module-header">
-          <h2>Token</h2>
+          <h2>Token Quest</h2>
           <p>
-            Modelos como GPT e Claude não leem palavras — leem <strong>tokens</strong>.
+            Modelos como GPT leem <strong>tokens</strong>.
             Aqui usamos o <strong>NLTK</strong> para tokenizar e classificar seu texto em tempo real.
           </p>
         </div>
@@ -158,9 +158,9 @@
 
           <div class="tq-footer-row">
             <div class="tq-examples">
-              <button class="ex-btn" onclick="setEx('Olá! Como você está hoje?')">💬 Saudação</button>
-              <button class="ex-btn" onclick="setEx('def tokenize(text):\n    return text.split()')">🐍 Python</button>
-              <button class="ex-btn" onclick="setEx('antidisestablishmentarianism é uma palavra muito longa.')">🔡 Longa</button>
+              <button class="ex-btn" onclick="setEx('Olá! Como você está hoje?')">Saudação</button>
+              <button class="ex-btn" onclick="setEx('def tokenize(text):\n    return text.split()')">Python</button>
+              <button class="ex-btn" onclick="setEx('antidisestablishmentarianism é uma palavra muito longa.')">FraseLonga</button>
             </div>
             <span class="char-ct"><span id="tq-cc">0</span>/3000</span>
           </div>
@@ -202,20 +202,6 @@
             </div>
           </div>
 
-          <div style="margin-top:12px">
-            <div class="xp">
-              <div class="xp-lvl" id="xp-lv">1<small>nível</small></div>
-              <div class="xp-body">
-                <div class="xp-top">
-                  <span class="xp-label">XP TOTAL</span>
-                  <span class="xp-pts" id="xp-pts">0 XP</span>
-                </div>
-                <div class="xp-track">
-                  <div class="xp-fill" id="xp-fill" style="width:0%"></div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
       </div>

@@ -147,10 +147,7 @@ function getCores() {
   return html.getAttribute('data-theme') === 'dark' ? CORES_DARK : CORES;
 }
 
-let xpTotal = 0;
-const XP_LVL = 100;
 
-// Textarea counter
 const tqText = document.getElementById('tq-text');
 const tqCC   = document.getElementById('tq-cc');
 tqText.addEventListener('input', () => tqCC.textContent = tqText.value.length);
@@ -185,7 +182,6 @@ document.getElementById('tq-btn').addEventListener('click', async () => {
     if (d.erro) throw new Error(d.erro);
 
     renderTokens(d);
-    atualizarXP(d.total);
     document.getElementById('tq-res').style.display = 'block';
     document.getElementById('tq-res').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -245,11 +241,4 @@ function renderTokens(d) {
   document.getElementById('tm-rt').textContent  = ratio;
 }
 
-function atualizarXP(tokens) {
-  xpTotal += tokens;
-  const lv  = Math.floor(xpTotal / XP_LVL) + 1;
-  const pct = (xpTotal % XP_LVL) / XP_LVL * 100;
-  document.getElementById('xp-lv').innerHTML = lv + '<small>nível</small>';
-  document.getElementById('xp-pts').textContent = xpTotal + ' XP';
-  document.getElementById('xp-fill').style.width = pct + '%';
-}
+
