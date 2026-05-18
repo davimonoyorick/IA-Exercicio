@@ -163,4 +163,5 @@ def api_tokenizar():
     return jsonify(tokenizar_nltk(texto))
 
 if __name__ == "__main__":
+    import startup
     app.run(debug=True, port=5000)
